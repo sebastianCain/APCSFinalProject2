@@ -81,8 +81,6 @@ public class SixEncrypt {
 	public static void main(String args[]) {
 		String s = "abcdefgh";
 		//System.out.println(byteToBinary((byte)46));
-        byte[] bytes = SixEncrypt.encrypt(s);
-		for (byte b : bytes)
-	        System.out.println(b);
+        System.out.println(SixEncrypt.encrypt(s));
 	}	
 }
