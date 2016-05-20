@@ -58,8 +58,8 @@ public class SixEncrypt {
 
         for (byte b : bytes)
             bytestr += byteToBinary(b);
-        
-        for (int i = 0; i < bytestr.length(); i+=6)
+        System.out.println("bytestr l: " + bytestr.length());
+        for (int i = 40; i < bytestr.length(); i+=6) 
             finalstr += binary6ToChar(bytestr.substring(i, i+6));
 
         return finalstr;
