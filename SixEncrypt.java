@@ -38,11 +38,12 @@ public class SixEncrypt {
         for (int i = 0; i < s.length(); i+=4) {
             String fourChars = "";
             for (int j = 0; j < 4; j++) {
-				//System.out.println(i + ", " + j);
                 fourChars += charToBinary6(schars[currchar]);
                 currchar++;
             }
+            System.out.println(fourChars);
 			for (int k = 0; k < 3; k++) {
+                System.out.println("currbyte: " + currbyte + "  bits: " + binaryToByte(fourChars.substring(k*8, k*8+8)));
                 bytes[currbyte] = binaryToByte(fourChars.substring(k*8, k*8+8));
                 currbyte++;
             }
@@ -58,7 +59,7 @@ public class SixEncrypt {
 
         for (byte b : bytes)
             bytestr += byteToBinary(b);
-        System.out.println("bytestr l: " + bytestr.length());
+        //System.out.println("bytestr l: " + bytestr.length());
         for (int i = 40; i < bytestr.length(); i+=6) 
             finalstr += binary6ToChar(bytestr.substring(i, i+6));
 
@@ -100,7 +101,6 @@ public class SixEncrypt {
 
 	public static void main(String args[]) {
 		String s = "qwertyuiopasdfghjklzxcvb";
-		//System.out.println(byteToBinary((byte)46));
         System.out.println("\nOriginal Text:\n" + s + "\n\nEncrypted Bytes:");
         byte[] bytes = SixEncrypt.encrypt(s);
 		for (byte b : bytes)
