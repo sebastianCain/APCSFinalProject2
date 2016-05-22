@@ -43,10 +43,10 @@ public class SixEncrypt {
                 fourChars += charToBinary6(schars[currchar]);
                 currchar++;
             }
-            System.out.println(fourChars);
+            System.out.println("four chars " +fourChars);
 			for (int k = 0; k < 3; k++) {
                 System.out.println("currbyte: " + currbyte + "  bits: " + binaryToByte(fourChars.substring(k*8, k*8+8)));
-                bytes[currbyte] = binaryToByte(fourChars.substring(k*8, k*8+8));
+                bytes[currbyte] =  binaryToByte(fourChars.substring(k*8, k*8+8));
                 currbyte++;
             }
         }
@@ -98,7 +98,12 @@ public class SixEncrypt {
     }
     
     public static String byteToBinary(byte b) {
-        return String.format("%8s", Integer.toBinaryString(b)).replace(' ', '0');
+        //if (b < 0){
+        //    System.out.println("negative detected");
+        //    b += 128;
+        //}
+        
+        return Integer.toBinaryString((b & 0xFF) + 0x100).substring(1);
     }
     
     public static byte binaryToByte(String s) {
@@ -106,7 +111,8 @@ public class SixEncrypt {
     }
 
 	public static void main(String args[]) {
-		String s = "abcdefgh";
+        setup6();
+		String s = "9876";
         System.out.println("\nOriginal Text:\n" + s + "\n\nEncrypted Bytes:");
         byte[] bytes = SixEncrypt.encrypt(s);
 		for (byte b : bytes)
