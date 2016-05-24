@@ -1,6 +1,3 @@
-
-package main;
-
 import java.nio.ByteBuffer;
 
 public class SixEncrypt {
@@ -18,7 +15,7 @@ public class SixEncrypt {
         setup6();
         
         //setup input chars and output bytes
-        byte[] bytes = new byte[txt.length()*3/4+5];
+        byte[] bytes = new byte[txt.length()+5];
         String s = txt;
         char[] schars = s.toCharArray();
         
@@ -43,10 +40,7 @@ public class SixEncrypt {
         for (int i = 0; i < s.length(); i+=4) {
             String fourChars = "";
             for (int j = 0; j < 4; j++) {
-                if (currchar < s.length())
-                    fourChars += charToBinary6(schars[currchar]);
-                else
-                    fourChars += "000000";
+                fourChars += charToBinary6(schars[currchar]);
                 currchar++;
             }
             System.out.println("four chars " +fourChars);
@@ -68,27 +62,15 @@ public class SixEncrypt {
         
         String bytestr = "";
         String finalstr = "";
-        
-        byte[] size = new byte[4];
-        for (int i = 0; i < 4; i++)
-            size[i] = bytes[i+1];
-        
-        int strlength = ByteBuffer.wrap(size).getInt();
 
         for (byte b : bytes)
             bytestr += byteToBinary(b);
         //System.out.println("bytestr l: " + bytestr.length());
-        
-        int currbyte = 0;
-        while (currbyte < strlength) {
-            finalstr += binary6ToChar(bytestr.substring(40+currbyte*6, 40+currbyte*6+6));
-            currbyte++;
-        }
+        for (int i = 40; i < bytestr.length()-5; i+=6) 
+            finalstr += binary6ToChar(bytestr.substring(i, i+6));
 
         return finalstr;
     }
-    
-    
     
     public static String charToBinary6(char c) {
         byte b = indexForChar(c);
@@ -116,17 +98,21 @@ public class SixEncrypt {
     }
     
     public static String byteToBinary(byte b) {
+        //if (b < 0){
+        //    System.out.println("negative detected");
+        //    b += 128;
+        //}
+        
         return Integer.toBinaryString((b & 0xFF) + 0x100).substring(1);
     }
     
     public static byte binaryToByte(String s) {
         return (byte)(int)Integer.valueOf(s, 2);
     }
-     
 
 	public static void main(String args[]) {
         setup6();
-		String s = "Asher is a major fucking dick.";
+		String s = "9876";
         System.out.println("\nOriginal Text:\n" + s + "\n\nEncrypted Bytes:");
         byte[] bytes = SixEncrypt.encrypt(s);
 		for (byte b : bytes)
