@@ -15,10 +15,10 @@ public class SixEncrypt {
     
     public static byte[] encrypt(String txt) {
         
-        setup6();
+        SixEncrypt.setup6();
         
         //setup input chars and output bytes
-        byte[] bytes = new byte[txt.length()*3/4+5];
+        byte[] bytes = new byte[txt.length()*3/4 +8];
         String s = txt;
         char[] schars = s.toCharArray();
         
@@ -44,15 +44,15 @@ public class SixEncrypt {
             String fourChars = "";
             for (int j = 0; j < 4; j++) {
                 if (currchar < s.length())
-                    fourChars += charToBinary6(schars[currchar]);
+                    fourChars += SixEncrypt.charToBinary6(schars[currchar]);
                 else
                     fourChars += "000000";
                 currchar++;
             }
-            System.out.println("four chars " +fourChars);
+            
 			for (int k = 0; k < 3; k++) {
-                System.out.println("currbyte: " + currbyte + "  bits: " + binaryToByte(fourChars.substring(k*8, k*8+8)));
-                bytes[currbyte] =  binaryToByte(fourChars.substring(k*8, k*8+8));
+                //System.out.println("currbyte: " + currbyte + "  bits: " + binaryToByte(fourChars.substring(k*8, k*8+8)));
+                bytes[currbyte] =  SixEncrypt. binaryToByte(fourChars.substring(k*8, k*8+8));
                 currbyte++;
             }
         }
@@ -123,15 +123,18 @@ public class SixEncrypt {
         return (byte)(int)Integer.valueOf(s, 2);
     }
      
-
+    /*
 	public static void main(String args[]) {
         setup6();
-		String s = "Asher is a major fucking dick.";
+        String s = "Asher is a major fucking dick.";
         System.out.println("\nOriginal Text:\n" + s + "\n\nEncrypted Bytes:");
-        byte[] bytes = SixEncrypt.encrypt(s);
-		for (byte b : bytes)
-	        System.out.print(b + ", ");
-        System.out.println("Decrypted Text:\n" + SixEncrypt.decrypt(bytes));
-        System.out.println(charToBinary6('c'));
-	}	
+        byte[] bytes = encrypt(s);
+        for (byte b : bytes)
+            System.out.print(b + ", ");
+        System.out.println("\n");
+        String output = decrypt(bytes);
+        System.out.println(output);
+        
+	}
+    */	
 }

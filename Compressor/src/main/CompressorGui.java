@@ -5,12 +5,10 @@
  */
 package main;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import java.io.BufferedReader;
-import java.util.zip.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -45,13 +43,11 @@ public class CompressorGui extends javax.swing.JFrame {
 
         fileChooser = new javax.swing.JFileChooser();
         diagDialog = new javax.swing.JDialog();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        diagText = new javax.swing.JTextArea();
         diagClose = new javax.swing.JButton();
+        diagText = new javax.swing.JLabel();
         errorDialog = new javax.swing.JDialog();
-        diagClose1 = new javax.swing.JButton();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        errorClose = new javax.swing.JButton();
+        errorText = new javax.swing.JLabel();
         sixBit = new javax.swing.JPanel();
         sixBitText = new javax.swing.JLabel();
         sixBitCompress = new javax.swing.JButton();
@@ -79,14 +75,6 @@ public class CompressorGui extends javax.swing.JFrame {
 
         diagDialog.setMinimumSize(new java.awt.Dimension(500, 250));
 
-        diagText.setEditable(false);
-        diagText.setColumns(20);
-        diagText.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
-        diagText.setRows(5);
-        diagText.setText("Diagnostic  complete");
-        diagText.setBorder(null);
-        jScrollPane1.setViewportView(diagText);
-
         diagClose.setText("Close");
         diagClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,65 +82,77 @@ public class CompressorGui extends javax.swing.JFrame {
             }
         });
 
+        diagText.setBackground(new java.awt.Color(204, 255, 255));
+        diagText.setFont(new java.awt.Font("Menlo", 1, 24)); // NOI18N
+        diagText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        diagText.setText("Message");
+
         javax.swing.GroupLayout diagDialogLayout = new javax.swing.GroupLayout(diagDialog.getContentPane());
         diagDialog.getContentPane().setLayout(diagDialogLayout);
         diagDialogLayout.setHorizontalGroup(
             diagDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(diagDialogLayout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addGroup(diagDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(diagClose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE))
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addGap(33, 33, 33)
+                .addComponent(diagClose, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
+            .addGroup(diagDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(diagDialogLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(diagText, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         diagDialogLayout.setVerticalGroup(
             diagDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(diagDialogLayout.createSequentialGroup()
-                .addContainerGap(45, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, diagDialogLayout.createSequentialGroup()
+                .addContainerGap(156, Short.MAX_VALUE)
                 .addComponent(diagClose)
-                .addGap(35, 35, 35))
+                .addGap(21, 21, 21))
+            .addGroup(diagDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(diagDialogLayout.createSequentialGroup()
+                    .addGap(60, 60, 60)
+                    .addComponent(diagText, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                    .addGap(61, 61, 61)))
         );
 
         errorDialog.setMinimumSize(new java.awt.Dimension(500, 250));
 
-        diagClose1.setText("Close");
-        diagClose1.addActionListener(new java.awt.event.ActionListener() {
+        errorClose.setText("Close");
+        errorClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                diagClose1ActionPerformed(evt);
+                errorCloseActionPerformed(evt);
             }
         });
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("STHeiti", 1, 36)); // NOI18N
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(1);
-        jTextArea1.setText("Error Encountered!");
-        jScrollPane4.setViewportView(jTextArea1);
+        errorText.setBackground(new java.awt.Color(204, 255, 255));
+        errorText.setFont(new java.awt.Font("Menlo", 1, 24)); // NOI18N
+        errorText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        errorText.setText("Error");
 
         javax.swing.GroupLayout errorDialogLayout = new javax.swing.GroupLayout(errorDialog.getContentPane());
         errorDialog.getContentPane().setLayout(errorDialogLayout);
         errorDialogLayout.setHorizontalGroup(
             errorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, errorDialogLayout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44))
             .addGroup(errorDialogLayout.createSequentialGroup()
                 .addGap(86, 86, 86)
-                .addComponent(diagClose1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(errorClose, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(87, Short.MAX_VALUE))
+            .addGroup(errorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(errorDialogLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(errorText, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         errorDialogLayout.setVerticalGroup(
             errorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(errorDialogLayout.createSequentialGroup()
-                .addContainerGap(54, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(diagClose1)
+                .addContainerGap(145, Short.MAX_VALUE)
+                .addComponent(errorClose)
                 .addGap(29, 29, 29))
+            .addGroup(errorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(errorDialogLayout.createSequentialGroup()
+                    .addGap(60, 60, 60)
+                    .addComponent(errorText, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                    .addGap(61, 61, 61)))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -335,15 +335,19 @@ public class CompressorGui extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sixBitCompressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sixBitCompressActionPerformed
-        errorDialog.setVisible(true);
-        _output = SixEncrypt.encrypt(_data);
-        diagDialog.setVisible(true);
-        diagText.setText(_output.toString());
-    
-        
-        
         try {
-	   
+            _output = SixEncrypt.encrypt(_data);
+            //diagDialog.setVisible(true);
+            //diagText.setText(_output.toString());
+        }
+        
+        catch(Exception e){
+            errorDialog.setVisible(true);
+            errorText.setText("Method hang!");
+            System.out.println(e);
+        }
+   
+        try {
 	    diagDialog.setVisible(true);
             fileChooser.setSelectedFile(new File("archive.zip"));
             fileChooser.showSaveDialog(this);
@@ -353,10 +357,13 @@ public class CompressorGui extends javax.swing.JFrame {
             
 	    fileOutputStream.write(_output);
 	    fileOutputStream.close();
-            diagText.setText("Done!");
-        }catch(Exception e){
-            
+            diagDialog.setVisible(true);
+            diagText.setText("File compressed!");   
+        }
+        
+        catch(Exception e){
             errorDialog.setVisible(true);
+            errorText.setText("Compression error!");
         }
     }//GEN-LAST:event_sixBitCompressActionPerformed
 
@@ -379,24 +386,25 @@ public class CompressorGui extends javax.swing.JFrame {
 			fileReader.close();
                         
                         _data = stringBuffer.toString();
-			diagDialog.setVisible(true);
-                        diagText.setText(_data);
+			//diagDialog.setVisible(true);
+                        //diagText.setText("Data compressed!");
 		} catch (IOException e) {
-			e.printStackTrace();
+			errorDialog.setVisible(true);
+                        errorText.setText("File selection error!");
 		}
             
         } else {
-        System.out.println("File access cancelled by user.");
+            errorDialog.setVisible(true);
+            errorText.setText("File action canceled by user!");
         }
     }//GEN-LAST:event_subFileOpenActionPerformed
 
     private void sixBitDecompressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sixBitDecompressActionPerformed
         try {
-	 
-            
+	
             diagDialog.setVisible(true);
             fileChooser.setSelectedFile(new File(""));
-            fileChooser.showOpenDialog(this);
+            fileChooser.showSaveDialog(this);
             File newFile = fileChooser.getSelectedFile();
             String path = newFile.toPath().toString();
             
@@ -408,7 +416,6 @@ public class CompressorGui extends javax.swing.JFrame {
             BufferedWriter bufferedWriter = null;
             
         try {
-            // check if file exist, otherwise create the file before writing
             if (!newFile.exists()) {
                 newFile.createNewFile();
             }
@@ -417,18 +424,20 @@ public class CompressorGui extends javax.swing.JFrame {
             bufferedWriter.write(_data);
         } catch (IOException e) {
             errorDialog.setVisible(true);
+            errorText.setText("Decompression error!");
         } finally{
             try{
                 if(bufferedWriter != null) bufferedWriter.close();
             } catch(Exception ex){
                 errorDialog.setVisible(true);
+                errorText.setText("Decompression error!");
             }
         }
-           
+            diagDialog.setVisible(true);
             diagText.setText("Done!");
         }catch(Exception e){
-            
             errorDialog.setVisible(true);
+            errorText.setText("Decompression error!");
         }
 //convert file into array of bytes
 	    
@@ -452,9 +461,9 @@ public class CompressorGui extends javax.swing.JFrame {
         diagDialog.dispose();
     }//GEN-LAST:event_diagCloseActionPerformed
 
-    private void diagClose1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diagClose1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_diagClose1ActionPerformed
+    private void errorCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCloseActionPerformed
+        errorDialog.dispose();
+    }//GEN-LAST:event_errorCloseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -496,20 +505,18 @@ public class CompressorGui extends javax.swing.JFrame {
     private javax.swing.JTextArea currPath;
     private javax.swing.JLabel currPathLabel;
     private javax.swing.JButton diagClose;
-    private javax.swing.JButton diagClose1;
     private javax.swing.JDialog diagDialog;
-    private javax.swing.JTextArea diagText;
+    private javax.swing.JLabel diagText;
     private javax.swing.JPanel dictComp;
     private javax.swing.JButton dictCompress;
     private javax.swing.JButton dictDecompress;
     private javax.swing.JLabel dictText;
+    private javax.swing.JButton errorClose;
     private javax.swing.JDialog errorDialog;
+    private javax.swing.JLabel errorText;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JPanel filePane;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenu menuFile;
     private javax.swing.JPanel sixBit;
