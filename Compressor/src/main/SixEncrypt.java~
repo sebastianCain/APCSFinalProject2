@@ -7,13 +7,9 @@ public class SixEncrypt {
     
     private static char[] _chars;
     private static String _charString;
-    private static String _exString
-
+    
     public static void setup6() {
-		_exString = "{}[]@#$%^&*_+-=<\"\\";
-		_numString = "0123456789";
-        _charString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;'()-?!/ ";
-
+        _charString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. ";
         _chars = _charString.toCharArray();
     }
     
@@ -112,9 +108,7 @@ public class SixEncrypt {
             if (_chars[(int)i] == c)
                 return i;
         }
-        //not in utf 6 charset
-		for (byte i = 0; i < exString.length(); i++) {
-			if ()
+        return 0;
     }
     
     public static char charForIndex(byte b) {
