@@ -7,12 +7,13 @@ package main;
 
 import java.io.FileReader;
 import java.io.IOException;
-import javax.swing.JFileChooser;
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.*;
+import java.awt.*;
 
 
 /**
@@ -57,10 +58,16 @@ public class CompressorGui extends javax.swing.JFrame {
         dictCompress = new javax.swing.JButton();
         dictDecompress = new javax.swing.JButton();
         filePane = new javax.swing.JPanel();
+        barFile = new javax.swing.JProgressBar();
         chooseFile = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        pathViewer = new javax.swing.JScrollPane();
         currPath = new javax.swing.JTextArea();
-        currPathLabel = new javax.swing.JLabel();
+        controlPanel = new javax.swing.JPanel();
+        compBarLabel = new javax.swing.JLabel();
+        decompBarLabel = new javax.swing.JLabel();
+        compBar = new javax.swing.JProgressBar();
+        decompBar = new javax.swing.JProgressBar();
+        jSeparator1 = new javax.swing.JSeparator();
         menu = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         subFileOpen = new javax.swing.JMenuItem();
@@ -236,6 +243,15 @@ public class CompressorGui extends javax.swing.JFrame {
 
         filePane.setBackground(new java.awt.Color(153, 204, 255));
 
+        barFile.setBackground(new java.awt.Color(153, 204, 255));
+        barFile.setForeground(new java.awt.Color(0, 102, 0));
+        barFile.setToolTipText("");
+        barFile.setFocusable(false);
+        barFile.setName("Selected File"); // NOI18N
+        barFile.setRequestFocusEnabled(false);
+        barFile.setString("Selected File");
+        barFile.setStringPainted(true);
+
         chooseFile.setText("Choose File");
         chooseFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,44 +259,101 @@ public class CompressorGui extends javax.swing.JFrame {
             }
         });
 
+        pathViewer.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        pathViewer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
         currPath.setEditable(false);
-        currPath.setBackground(new java.awt.Color(153, 204, 255));
+        currPath.setBackground(new java.awt.Color(148, 188, 228));
         currPath.setColumns(20);
         currPath.setFont(new java.awt.Font("Menlo", 0, 13)); // NOI18N
         currPath.setRows(1);
         currPath.setText(" None");
         currPath.setToolTipText("Shows the currently selected file");
-        currPath.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        currPath.setBorder(null);
         currPath.setFocusable(false);
-        jScrollPane2.setViewportView(currPath);
+        pathViewer.setViewportView(currPath);
 
-        currPathLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        currPathLabel.setText("Selected File");
+        compBarLabel.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        compBarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        compBarLabel.setText("Compress");
+
+        decompBarLabel.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
+        decompBarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        decompBarLabel.setText("Decompress");
+
+        compBar.setBackground(new java.awt.Color(255, 255, 255));
+        compBar.setForeground(new java.awt.Color(0, 102, 0));
+        compBar.setFocusable(false);
+
+        decompBar.setBackground(new java.awt.Color(255, 255, 255));
+        decompBar.setForeground(new java.awt.Color(0, 102, 0));
+        decompBar.setFocusable(false);
+
+        javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
+        controlPanel.setLayout(controlPanelLayout);
+        controlPanelLayout.setHorizontalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(decompBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(compBarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(compBar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(decompBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSeparator1)
+                .addContainerGap())
+        );
+        controlPanelLayout.setVerticalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(compBarLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(compBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(decompBarLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(decompBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout filePaneLayout = new javax.swing.GroupLayout(filePane);
         filePane.setLayout(filePaneLayout);
         filePaneLayout.setHorizontalGroup(
             filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(filePaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(currPathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, filePaneLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(chooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(135, 135, 135))
+                .addGroup(filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, filePaneLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(chooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46))
+                    .addGroup(filePaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pathViewer, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(barFile, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         filePaneLayout.setVerticalGroup(
             filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(filePaneLayout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(chooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(currPathLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addGroup(filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(filePaneLayout.createSequentialGroup()
+                        .addComponent(chooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21)
+                        .addComponent(barFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pathViewer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17))
         );
 
         menuFile.setText("File");
@@ -311,13 +384,13 @@ public class CompressorGui extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(filePane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(sixBit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(dictComp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,21 +407,46 @@ public class CompressorGui extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    private void statusBarReset(){
+        
+        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+        compBar.setForeground(new Color(153,0,0));//red
+        compBar.setForeground(new Color(0,102,0));//green
+        decompBar.setForeground(new Color(153,0,0));
+        decompBar.setForeground(new Color(0,102,0));
+        barFile.setForeground(new Color(153,0,0));
+        barFile.setForeground(new Color(0,102,0));
+        barFile.setValue(0);
+        decompBar.setValue(0);
+        compBar.setValue(0);
+
+    }
+    
+    
     private void sixBitCompressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sixBitCompressActionPerformed
+        String oldPath = _file.toPath().toString();
+        if (_file == null){
+            statusBarReset();
+            compBar.setValue(100);
+                
+            compBar.setForeground(new Color(153,0,0));//red
+            currPath.setText("Compression Error!");
+        }
+        else if (!(oldPath.substring(oldPath.length() - 4).equals(".txt"))){
+            statusBarReset();
+            //_file == null;
+            compBar.setValue(100);
+                
+            compBar.setForeground(new Color(153,0,0));//red
+            currPath.setText("Incorrect file type selected!");
+        }
+            
+        else{
         try {
             _output = SixEncrypt.encrypt(_data);
-            //diagDialog.setVisible(true);
-            //diagText.setText(_output.toString());
-        }
-        
-        catch(Exception e){
-            errorDialog.setVisible(true);
-            errorText.setText("Method hang!");
-            System.out.println(e);
-        }
-   
-        try {
-	    diagDialog.setVisible(true);
+	    
             fileChooser.setSelectedFile(new File("archive.zip"));
             fileChooser.showSaveDialog(this);
             File newFile = fileChooser.getSelectedFile();
@@ -357,13 +455,28 @@ public class CompressorGui extends javax.swing.JFrame {
             
 	    fileOutputStream.write(_output);
 	    fileOutputStream.close();
-            diagDialog.setVisible(true);
-            diagText.setText("File compressed!");   
+
+            statusBarReset();
+            compBar.setValue(100);
+            compBar.setForeground(new Color(0,102,0));//green
+            _file = null;
+            currPath.setText("None");
+            
+            
+            
+            
+       
+            //diagDialog.setVisible(true);
+            //diagText.setText("File compressed!");   
         }
         
         catch(Exception e){
-            errorDialog.setVisible(true);
-            errorText.setText("Compression error!");
+            statusBarReset();
+            compBar.setValue(100);
+            compBar.setForeground(new Color(153,0,0));//red
+   
+            currPath.setText("Compression Error!");
+        }
         }
     }//GEN-LAST:event_sixBitCompressActionPerformed
 
@@ -374,7 +487,7 @@ public class CompressorGui extends javax.swing.JFrame {
             _file = input;
             try {
 			FileReader fileReader = new FileReader(input);
-                        //currPath.read(new FileReader(input.getAbsolutePath()), null);
+                        
                         currPath.setText(input.toPath().toString());
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			StringBuffer stringBuffer = new StringBuffer();
@@ -386,23 +499,34 @@ public class CompressorGui extends javax.swing.JFrame {
 			fileReader.close();
                         
                         _data = stringBuffer.toString();
-			//diagDialog.setVisible(true);
-                        //diagText.setText("Data compressed!");
+			statusBarReset();
+                        barFile.setValue(100);
+                        barFile.setForeground(new Color(0,102,0));//green
 		} catch (IOException e) {
-			errorDialog.setVisible(true);
-                        errorText.setText("File selection error!");
+                    currPath.setText("File read error!");
+                    statusBarReset();
+                    barFile.setValue(100);
+                    barFile.setForeground(new Color(153,0,0));//red
+                    //errorDialog.setVisible(true);
+                    //errorText.setText("File selection error!");
 		}
             
-        } else {
-            errorDialog.setVisible(true);
-            errorText.setText("File action canceled by user!");
         }
     }//GEN-LAST:event_subFileOpenActionPerformed
 
     private void sixBitDecompressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sixBitDecompressActionPerformed
+        if (_file == null){
+            statusBarReset();
+            decompBar.setValue(100);
+                
+            decompBar.setForeground(new Color(153,0,0));//red
+            currPath.setText("Decompression Error!");
+        }
+            
+        else{
         try {
 	
-            diagDialog.setVisible(true);
+           
             fileChooser.setSelectedFile(new File(""));
             fileChooser.showSaveDialog(this);
             File newFile = fileChooser.getSelectedFile();
@@ -412,6 +536,7 @@ public class CompressorGui extends javax.swing.JFrame {
 	    fileInputStream.read(_output);
             _data = SixEncrypt.decrypt(_output);
 	    fileInputStream.close();
+            currPath.setText(_file.toPath().toString());
             
             BufferedWriter bufferedWriter = null;
             
@@ -423,22 +548,35 @@ public class CompressorGui extends javax.swing.JFrame {
             bufferedWriter = new BufferedWriter(writer);
             bufferedWriter.write(_data);
         } catch (IOException e) {
-            errorDialog.setVisible(true);
-            errorText.setText("Decompression error!");
+            statusBarReset();
+            decompBar.setValue(100);
+            decompBar.setForeground(new Color(153,0,0));//red
+            currPath.setText("Decompression Error!");
         } finally{
             try{
                 if(bufferedWriter != null) bufferedWriter.close();
             } catch(Exception ex){
-                errorDialog.setVisible(true);
-                errorText.setText("Decompression error!");
+                statusBarReset();
+                decompBar.setValue(100);
+                
+                decompBar.setForeground(new Color(153,0,0));//red
+                currPath.setText("Decompression Error!");
             }
         }
-            diagDialog.setVisible(true);
-            diagText.setText("Done!");
+            statusBarReset();
+            decompBar.setValue(100);
+            decompBar.setForeground(new Color(0,102,0));//green
+            _file = null;
+            currPath.setText("None");
+            
+            
         }catch(Exception e){
-            errorDialog.setVisible(true);
-            errorText.setText("Decompression error!");
+            statusBarReset();
+            decompBar.setValue(100);
+            decompBar.setForeground(new Color(153,0,0));//red
+            currPath.setText("Decompression Error!");
         }
+                }
 //convert file into array of bytes
 	    
 	       
@@ -474,13 +612,11 @@ public class CompressorGui extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
+    
+            try {
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(CompressorGui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -501,9 +637,14 @@ public class CompressorGui extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JProgressBar barFile;
     private javax.swing.JButton chooseFile;
+    private javax.swing.JProgressBar compBar;
+    private javax.swing.JLabel compBarLabel;
+    private javax.swing.JPanel controlPanel;
     private javax.swing.JTextArea currPath;
-    private javax.swing.JLabel currPathLabel;
+    private javax.swing.JProgressBar decompBar;
+    private javax.swing.JLabel decompBarLabel;
     private javax.swing.JButton diagClose;
     private javax.swing.JDialog diagDialog;
     private javax.swing.JLabel diagText;
@@ -516,9 +657,10 @@ public class CompressorGui extends javax.swing.JFrame {
     private javax.swing.JLabel errorText;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JPanel filePane;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JScrollPane pathViewer;
     private javax.swing.JPanel sixBit;
     private javax.swing.JButton sixBitCompress;
     private javax.swing.JButton sixBitDecompress;
