@@ -10,9 +10,8 @@ public class SixEncrypt {
     private static String _exString
 
     public static void setup6() {
-		_exString = "{}[]@#$%^&*_+-=<\"\\";
-		_numString = "0123456789";
-        _charString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;'()-?!/ ";
+		_escapeString = "0123456789{}[]@#$%^&*_+-=<>"
+        _charString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;'()-?/\ ";
 
         _chars = _charString.toCharArray();
     }
