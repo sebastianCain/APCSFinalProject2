@@ -325,16 +325,16 @@ public class CompressorGui extends javax.swing.JFrame {
         dropPaneLayout.setHorizontalGroup(
             dropPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dropPaneLayout.createSequentialGroup()
-                .addGap(41, 41, 41)
+                .addGap(37, 37, 37)
                 .addComponent(chooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         dropPaneLayout.setVerticalGroup(
             dropPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dropPaneLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dropPaneLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(chooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(17, 17, 17))
         );
 
         javax.swing.GroupLayout filePaneLayout = new javax.swing.GroupLayout(filePane);
@@ -343,11 +343,15 @@ public class CompressorGui extends javax.swing.JFrame {
             filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(filePaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pathViewer)
-                    .addComponent(barFile, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dropPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(32, 32, 32)
+                .addGroup(filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(filePaneLayout.createSequentialGroup()
+                        .addGroup(filePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pathViewer, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(barFile, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, filePaneLayout.createSequentialGroup()
+                        .addComponent(dropPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)))
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -426,10 +430,29 @@ public class CompressorGui extends javax.swing.JFrame {
                 {   public void filesDropped(java.io.File[] files)
                     {   
                         _file = files[0];
-                        currPath.setText(_file.toPath().toString());
-                        statusBarReset();
-                        barFile.setValue(100);
-                        barFile.setForeground(new Color(0,102,0));//green
+                        try {
+                            FileReader fileReader = new FileReader(_file);
+
+                            currPath.setText(" " + _file.toPath().toString());
+                            BufferedReader bufferedReader = new BufferedReader(fileReader);
+                            StringBuffer stringBuffer = new StringBuffer();
+                            String line;
+                            while ((line = bufferedReader.readLine()) != null) {
+                                    stringBuffer.append(line);
+                                    stringBuffer.append("\n");
+                            }
+                            fileReader.close();
+
+                            _data = stringBuffer.toString();
+                            statusBarReset();
+                            barFile.setValue(100);
+                            barFile.setForeground(new Color(0,102,0));//green
+                        } catch (IOException e) {
+                            currPath.setText(" File read error!");
+                            statusBarReset();
+                            barFile.setValue(100);
+                            barFile.setForeground(new Color(153,0,0));//red
+                        } 
                     }   // end filesDropped
                 }); // end FileDrop.Listener
             
@@ -486,7 +509,6 @@ public class CompressorGui extends javax.swing.JFrame {
         */
             
         else{
-            System.out.println("test");
             try {
                 _output = SixEncrypt.encrypt(_data);
 
