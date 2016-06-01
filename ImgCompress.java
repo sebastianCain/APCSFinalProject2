@@ -1,21 +1,42 @@
 
-package main;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 import java.nio.ByteBuffer;
 
 public class ImgCompress{
 
-	BufferedImage img = Image IO.read(new File("sample.bmp"));
+	private static BufferedImage _img;
 
-	int _width = img.getWidth();
-	int _height = img.getHeight();
+	public static void setupImg(){
+		try
+	    	{
+	      	// the line that reads the image file
+	     	 BufferedImage img = ImageIO.read(new File("clue.bmp"));
+	     	 _img = img;
+	     	 } 
+    	catch (IOException e)
+	    {
+	      System.out.println("error");
+    	}
+	}
 
-	byte[][] pixels = new byte[_height][_width];
+	private static int _width;
+	private static int _height;
 
-	byte[] palette = new byte[];
+	byte[][] pixels;
+
+	//byte[] palette = new byte[];
 
 
 	public static void main(String[] args){
+		setupImg();
+		int _width = _img.getWidth();
+		int _height = _img.getHeight();
+		System.out.println("width: " + _width + "height: " + _height);
+		byte[][] pixels = new byte[_height][_width];
 	}
 }
 
