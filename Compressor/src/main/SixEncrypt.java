@@ -9,7 +9,7 @@ public class SixEncrypt {
     private static char[] _escapechars;
     
     public static void setup6() {
-		String escapeString = "0123456789{}[]@#$%^&*_+-=<>!~\"`\\";
+  String escapeString = "0123456789{}[]@#$%^&*_+-=<>!~\"`\\";
         _escapechars = escapeString.toCharArray();
         
         String charString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:;'()-?/| ";
@@ -25,7 +25,7 @@ public class SixEncrypt {
         s = escapeIllegalCharacters(s);
         byte[] bytes = new byte[s.length()*3/4 +8];
         char[] schars = s.toCharArray();
-        
+        System.out.println("s in shit " + s);
         //Set first byte to show type of encryption
         bytes[0] = 1;
         
@@ -36,8 +36,8 @@ public class SixEncrypt {
         for (int i = 1; i < 5; i++)
             bytes[i] = result[i-1];
         
-		//for (byte b : bytes)
-	    //    System.out.print(b + " ");
+  //for (byte b : bytes)
+     //    System.out.print(b + " ");
         //System.out.println("");
 
         int currchar = 0;
@@ -54,7 +54,7 @@ public class SixEncrypt {
                 currchar++;
             }
             
-			for (int k = 0; k < 3; k++) {
+        for (int k = 0; k < 3; k++) {
                 //System.out.println("currbyte: " + currbyte + "  bits: " + binaryToByte(fourChars.substring(k*8, k*8+8)));
                 bytes[currbyte] =  SixEncrypt.binaryToByte(fourChars.substring(k*8, k*8+8));
                 currbyte++;
@@ -62,7 +62,7 @@ public class SixEncrypt {
         }
 
         //for (byte b : bytes)
-	    //    System.out.print(b + " ");
+     //    System.out.print(b + " ");
         //System.out.println("");
         return bytes;
     }
@@ -88,7 +88,7 @@ public class SixEncrypt {
             finalstr += binary6ToChar(bytestr.substring(40+currbyte*6, 40+currbyte*6+6));
             currbyte++;
         }
-
+        finalstr = unescapeIllegalCharacters(finalstr);
         return finalstr;
     }
     
@@ -98,26 +98,33 @@ public class SixEncrypt {
         
         int currchar = 0;
         for (int i = 0; i < chars.length; i++) {
-            if (indexForChar(chars[i], true) != -1) {
+            System.out.println(indexForChar(chars[i], true));
+            if (indexForChar(chars[i], true) != 64) {
                 fin[currchar] = chars[i];
                 currchar++;
             } else {
+                
+                System.out.println("BAR TIME");
                 fin[currchar] = '|';
                 fin[currchar+1] = charForIndex(indexForChar(chars[i], false), true);
                 currchar += 2;
             }
         }
-        return String.valueOf(fin);
+        
+        System.out.println("FUCK " + String.valueOf(fin));
+        return new String(fin);
     }
     
     public static String unescapeIllegalCharacters(String s) {
         char[] chars = s.toCharArray();
         char[] fin = new char[chars.length];
         
+        System.out.println(s);
         int currchar1 = 0;
         int currchar2 = 0;
         while (currchar1 < chars.length) {
             if (chars[currchar1] == '|') {
+                System.out.println("FUCK");
                 fin[currchar2] = charForIndex(indexForChar(chars[currchar1+1], true), false);
                 currchar1 += 2;
                 currchar2++;
@@ -134,7 +141,7 @@ public class SixEncrypt {
     public static String charToBinary6(char c) {
         byte b = indexForChar(c, true);
         String s = byteToBinary(b);
-		//System.out.println(c);
+  //System.out.println(c);
         return s.substring(2);
     }
     
@@ -150,10 +157,11 @@ public class SixEncrypt {
                 if (_mainchars[(int)i] == c)
                     return i;
             else
-                if (_escapechars[(int)i] == c)
-                    return i;
+                if (i < _escapechars.length)
+                    if (_escapechars[(int)i] == c)
+                        return i;
         }
-        return -1;
+        return 64;
     }
     
     public static char charForIndex(byte b, boolean legal) {
@@ -172,17 +180,15 @@ public class SixEncrypt {
     }
     
     
-	public static void main(String[] args) {
+ public static void main(String[] args) {
         setup6();
-        String s = "Asher is a major fucking dick.";
+        String s = "A$her L4sd4y 1s 4 m4j0r f%#$^(ing cock";
         System.out.println("\nOriginal Text:\n" + s + "\n\nEncrypted Bytes:");
         byte[] bytes = encrypt(s);
-        for (byte b : bytes)
-            System.out.print(b + ", ");
         System.out.println("\n");
         String output = decrypt(bytes);
         System.out.println(output);
         
-	}
-    	
+ }
+     
 }
