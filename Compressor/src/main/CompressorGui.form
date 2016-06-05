@@ -331,12 +331,18 @@
             <Property name="text" type="java.lang.String" value="Compress"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dictCompressActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="dictDecompress">
           <Properties>
             <Property name="text" type="java.lang.String" value="Decompress"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dictDecompressActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

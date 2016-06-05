@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.*;
 import java.awt.*;
+import java.nio.file.Files;
+import java.util.*;
 
 
 public class CompressorGui extends javax.swing.JFrame {
@@ -205,9 +207,19 @@ public class CompressorGui extends javax.swing.JFrame {
 
         dictCompress.setText("Compress");
         dictCompress.setFocusable(false);
+        dictCompress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dictCompressActionPerformed(evt);
+            }
+        });
 
         dictDecompress.setText("Decompress");
         dictDecompress.setFocusable(false);
+        dictDecompress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dictDecompressActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dictCompLayout = new javax.swing.GroupLayout(dictComp);
         dictComp.setLayout(dictCompLayout);
@@ -496,24 +508,15 @@ public class CompressorGui extends javax.swing.JFrame {
             compBar.setForeground(new Color(153,0,0));//red
             currPath.setText(" No file selected!");
         }
-        
-        /*
-        else if (!(oldPath.substring(oldPath.length() - 4).equals(".txt"))){
-            statusBarReset();
-            //_file == null;
-            compBar.setValue(100);
-                
-            compBar.setForeground(new Color(153,0,0));//red
-            currPath.setText(" Incorrect file type selected!");
-        }
-        */
+       
             
         else{
             try {
                 _output = SixEncrypt.encrypt(_data);
 
                 fileChooser.setSelectedFile(new File("archive.zip"));
-                fileChooser.showSaveDialog(this);
+                int returnVal = fileChooser.showSaveDialog(this);
+                if (returnVal == JFileChooser.APPROVE_OPTION){
                 File newFile = fileChooser.getSelectedFile();
                 String path = newFile.toPath().toString();
                 FileOutputStream fileOutputStream = new FileOutputStream(path); 
@@ -526,6 +529,14 @@ public class CompressorGui extends javax.swing.JFrame {
                 compBar.setForeground(new Color(0,102,0));//green
                 _file = null;
                 currPath.setText(" None");   
+            }
+                else{
+                    statusBarReset();
+                    compBar.setValue(100);
+                    compBar.setForeground(new Color(153,0,0));//red
+
+                    currPath.setText(" Operation Canceled!");  
+                }
             }
         
             catch(Exception e){
@@ -583,7 +594,8 @@ public class CompressorGui extends javax.swing.JFrame {
             try {
 
                 fileChooser.setSelectedFile(new File(""));
-                fileChooser.showSaveDialog(this);
+                int returnVal = fileChooser.showSaveDialog(this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File newFile = fileChooser.getSelectedFile();
                 String path = newFile.toPath().toString();
 
@@ -594,6 +606,7 @@ public class CompressorGui extends javax.swing.JFrame {
                 currPath.setText(" " + _file.toPath().toString());
 
                 BufferedWriter bufferedWriter = null;
+                
 
             try {
                 if (!newFile.exists()) {
@@ -624,13 +637,23 @@ public class CompressorGui extends javax.swing.JFrame {
                 _file = null;
                 currPath.setText(" None");
 
+            }
+                else{
+                    statusBarReset();
+                    decompBar.setValue(100);
+                    decompBar.setForeground(new Color(153,0,0));//red
 
-            }catch(Exception e){
+                    currPath.setText(" Operation Canceled!");  
+                }
+            }
+            catch(Exception e){
                 statusBarReset();
                 decompBar.setValue(100);
                 decompBar.setForeground(new Color(153,0,0));//red
                 currPath.setText(" Decompression Error!");
             }
+            
+            
         }
     }//GEN-LAST:event_sixBitDecompressActionPerformed
 
@@ -653,6 +676,137 @@ public class CompressorGui extends javax.swing.JFrame {
     private void errorCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCloseActionPerformed
         errorDialog.dispose();
     }//GEN-LAST:event_errorCloseActionPerformed
+
+    private void dictCompressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dictCompressActionPerformed
+        String oldPath = "";
+        if (_file != null){
+            oldPath = _file.toPath().toString();
+        }
+        if (_file == null){
+            statusBarReset();
+            compBar.setValue(100);
+                
+            compBar.setForeground(new Color(153,0,0));//red
+            currPath.setText(" No file selected!");
+        }
+        
+            
+        else{
+            try {
+                _output = DictCompress.encrypt(_data);
+                System.out.println("Before parse:" + Arrays.toString(_output));
+
+                fileChooser.setSelectedFile(new File("archive.zip"));
+                int returnVal = fileChooser.showSaveDialog(this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File newFile = fileChooser.getSelectedFile();
+                String path = newFile.toPath().toString();
+                FileOutputStream fileOutputStream = new FileOutputStream(newFile); 
+
+                fileOutputStream.write(_output);
+                System.out.println("To File:" + Arrays.toString(_output));
+                fileOutputStream.close();
+
+                statusBarReset();
+                compBar.setValue(100);
+                compBar.setForeground(new Color(0,102,0));//green
+                _file = null;
+                currPath.setText(" None");   
+            }
+                else{
+                    statusBarReset();
+                    compBar.setValue(100);
+                    compBar.setForeground(new Color(153,0,0));//red
+
+                    currPath.setText(" Operation Canceled!");  
+                }
+            }
+        
+            catch(Exception e){
+                statusBarReset();
+                compBar.setValue(100);
+                compBar.setForeground(new Color(153,0,0));//red
+
+                currPath.setText(" Compression Error!");
+                System.out.println(e);
+            }
+        }
+    }//GEN-LAST:event_dictCompressActionPerformed
+
+    private void dictDecompressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dictDecompressActionPerformed
+        if (_file == null){
+            statusBarReset();
+            decompBar.setValue(100);
+                
+            decompBar.setForeground(new Color(153,0,0));//red
+            currPath.setText(" No file selected!");
+        }
+            
+        else{
+            try {
+
+                int returnVal = fileChooser.showSaveDialog(this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+        
+                File newFile = fileChooser.getSelectedFile();
+                String path = newFile.toPath().toString();
+                _output = Files.readAllBytes(_file.toPath());
+                System.out.println("From File:" + Arrays.toString(_output));
+                _data = DictCompress.decrypt(_output);
+                currPath.setText(" " + _file.toPath().toString());
+                
+
+                BufferedWriter bufferedWriter = null;
+
+            try {
+                if (!newFile.exists()) {
+                    newFile.createNewFile();
+                }
+                Writer writer = new FileWriter(newFile);
+                bufferedWriter = new BufferedWriter(writer);
+                bufferedWriter.write(_data);
+            } catch (IOException e) {
+                statusBarReset();
+                decompBar.setValue(100);
+                decompBar.setForeground(new Color(153,0,0));//red
+                currPath.setText(" Decompression Error 1!");
+            } finally{
+                try{
+                    if(bufferedWriter != null) bufferedWriter.close();
+                } catch(Exception ex){
+                    statusBarReset();
+                    decompBar.setValue(100);
+
+                    decompBar.setForeground(new Color(153,0,0));//red
+                    currPath.setText(" Decompression Error 2!");
+                }
+            }
+                statusBarReset();
+                decompBar.setValue(100);
+                decompBar.setForeground(new Color(0,102,0));//green
+                _file = null;
+                currPath.setText(" None");
+
+            }
+                else{
+                    statusBarReset();
+                    decompBar.setValue(100);
+                    decompBar.setForeground(new Color(153,0,0));//red
+
+                    currPath.setText(" Operation Canceled!");  
+                }
+            }
+                catch(Exception e){
+                statusBarReset();
+                decompBar.setValue(100);
+                decompBar.setForeground(new Color(153,0,0));//red
+                currPath.setText(" Decompression Error 3!");
+                System.out.println(e);
+                System.out.println(e.getMessage());
+                
+            }
+        }
+    }//GEN-LAST:event_dictDecompressActionPerformed
 
     public static void main(String args[]) {
     

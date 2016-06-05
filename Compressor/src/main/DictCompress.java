@@ -7,8 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.lang.Byte;
 public class DictCompress {
   
-  public static final String PUNCTUATION = "'-/:;()$&@.,?!/ []{}~<>â\"\\ ";
-  public static final String LETTERS = " \'\n\tabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'-/:;()$&@.,?!/ %[]{}~<>â\"\\";
+  public static final String PUNCTUATION = "'=+_–-/:;()$&@.,?!/ []{}~<>â\"\\ ";
+  public static final String LETTERS = " \'\n\tabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'=+_–-/:;()$&@.,?!/ %[]{}~<>â\"\\";
   
   public static byte[] encrypt(String txt){
     String t = txt + " STOP"; //code doesn't include the last word, so we added a buffer word
