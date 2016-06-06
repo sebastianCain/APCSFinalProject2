@@ -21,19 +21,18 @@ public class DictCompress {
         word += t.substring(i,i+1); //add this char to your String word
       }    
       else { //the word is complete
-        int loc = 0; //the value we will add to our List (i.e. the reference to the word)
-        if (!dict.containsValue(word)) { //if the dictionary does not already has a reference to this word
-          dict.put(ctr,word); //create a new reference and put it in the dictionary
-          loc = ctr++; //our added value is the counter, because it is a newly stored word in the dictionary and increment the counter to avoid reference reduncancy
-        }
-        else { //if the dictionary already contains a reference to our word
+        int loc = -1; //the value we will add to our List (i.e. the reference to the word)
           for (Integer ref : dict.keySet()){ //iterate through the dictionary
             if (dict.get(ref).equals(word)){ //if ref is the reference to our word
               loc = ref;  //the added value will be equal to this ref
               break; //we can break out to save runtime
             }
           }
+           if (loc == -1) { //if the dictionary does not already has a reference to this word
+          dict.put(ctr,word); //create a new reference and put it in the dictionary
+          loc = ctr++; //our added value is the counter, because it is a newly stored word in the dictionary and increment the counter to avoid reference reduncancy
         }
+        
         //The following loop is used to ensure that bytes will work. For example, the integer value 130 would be scaled down into two bytes of value 127 and 3, respectively. This will ensure unique encoding of each reference.
         while (loc >= 128){ //while our reference is greater than or equal to 128
           words.add(Byte.parseByte("127")); //add the value 127 (to continue using bytes)
@@ -42,8 +41,9 @@ public class DictCompress {
         if (loc > 0) words.add(Byte.parseByte(loc+"")); //add our remaining value
         words.add(Byte.parseByte("0")); //The "0" signifies a change to the next word (necessary if there are more than 127 words in the inputted String)
         word = ""; //reinitialize the word to an empty String and reenter the loop
-      }     
+      }
     }
+    
     
     words.add(Byte.parseByte("-1")); //Siginifies a change from the references to the dictionary itself
     for (Integer i : dict.keySet()){ //for each key in the dictionary 
