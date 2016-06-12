@@ -48,21 +48,27 @@ public class ImgCompress{
 				int color = _img.getRGB(i, j);
 		    	if (!clrs.contains(color)) preclrs.add(color);
 		    }
+		}
+
 		for (int i = 0; i < preclrs.size()-1; i++){
 			if (preclrs.get(i) <= 127) 
 				clrs.add((byte)preclrs.get(i));
 			else 
 				clrs.add((byte)(preclrs.get(i)-256));
 		}
+
+		for (int i = 0; i < pixels.length; i++){
+			for (int k = 0; k < pixels[i].length; k++){
+				int pix = _img.getRGB(i, k);
+				for (int l = 0; l < preclrs.size(); l++)
+					if(pix == preclrs.get(l)){
+						pixels[i][k] = (byte)(l);
+					}
+			}
+
 		}
-
-		ArrayList<Integer> clrsByte = new ArrayList<>();
-
-		for (int x = 0; x < clrs.size(); x++){
-			if //convert to an arraylist where things > 127 are splint into 2
-		}
-
-
+		
+/*
 		byte[] palette = new byte[clrs.size()];
 		for (int k = 0; k < palette.length; k++){
 			//convert the clrs (Integers) into palette (bytes) by
@@ -73,6 +79,7 @@ public class ImgCompress{
 			System.out.print(palette[l] + "		");
 		}
 		System.out.println();
+*/
 	}
 
 	
