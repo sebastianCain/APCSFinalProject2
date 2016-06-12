@@ -39,13 +39,21 @@ public class ImgCompress{
 		System.out.println("width: " + _width + "height: " + _height);
 
 		byte[][] pixels = new byte[_height][_width];
-		ArrayList<Integer> clrs = new ArrayList<>();
+		ArrayList<int> preclrs = new ArrayList<>();//holds palette while image is being processed
+		byte[] clrs;//holds palette
 
+		//colors have values of 0-255. bytes have values of -128-127. overflow must be utilized
 		for (int i = 0; i < _width; i++){
 			for (int j = 0; j < _height; j++){
 				int color = _img.getRGB(i, j);
-		    	if (!clrs.contains(color)) clrs.add(color);
+		    	if (!clrs.contains(color)) preclrs.add(color);
 		    }
+		for (int i = 0; i < preclrs.size()-1; i++){
+			if (preclrs.get(i) <= 127) 
+				clrs.add((byte)preclrs.get(i));
+			else 
+				clrs.add((byte)(preclrs.get(i)-256));
+		}
 		}
 
 		ArrayList<Integer> clrsByte = new ArrayList<>();
