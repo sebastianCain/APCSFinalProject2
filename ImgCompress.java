@@ -10,12 +10,12 @@ import java.nio.ByteBuffer;
 public class ImgCompress{
 
 	private static BufferedImage _img;
-
-	public static void setupImg(){
+//file = clue.bmp
+	public static void setupImg(String file){
 		try
 	    	{
 	      	// the line that reads the image file
-	     	 BufferedImage img = ImageIO.read(new File("clue.bmp"));
+	     	 BufferedImage img = ImageIO.read(new File(file));
 	     	 _img = img;
 	     	 } 
     	catch (IOException e)
@@ -27,34 +27,47 @@ public class ImgCompress{
 	private static int _width;
 	private static int _height;
 
-	byte[][] pixels;
+	private static byte[][] pixels;
 
-	byte[] palette;
+	private static ArrayList<Integer> preclrs;
 
-	public static void encrypt(){
-		setupImg();
+	private static byte[] clrs;
+
+	private static ArrayList<Integer> vals;
+
+	private static ArrayList<Byte> prefin; 
+
+
+	private static byte[] fin;
+
+
+	public static byte[] encrypt(String file){
+		setupImg(file);
 
 		int _width = _img.getWidth();
 		int _height = _img.getHeight();
 		System.out.println("width: " + _width + "height: " + _height);
 
 		byte[][] pixels = new byte[_height][_width];
-		ArrayList<int> preclrs = new ArrayList<>();//holds palette while image is being processed
-		byte[] clrs;//holds palette
+		preclrs = new ArrayList<>();//holds palette while image is being processed
+		//byte[] clrs;//holds palette
 
 		//colors have values of 0-255. bytes have values of -128-127. overflow must be utilized
 		for (int i = 0; i < _width; i++){
 			for (int j = 0; j < _height; j++){
 				int color = _img.getRGB(i, j);
-		    	if (!clrs.contains(color)) preclrs.add(color);
+		    	if (!preclrs.contains(color)) 
+		    		preclrs.add(color);
 		    }
 		}
 
+		clrs = new byte[preclrs.size()];
+
 		for (int i = 0; i < preclrs.size()-1; i++){
 			if (preclrs.get(i) <= 127) 
-				clrs.add((byte)preclrs.get(i));
+				clrs[i]=((byte)((preclrs.get(i)).intValue()));
 			else 
-				clrs.add((byte)(preclrs.get(i)-256));
+				clrs[i]=((byte)((preclrs.get(i)).intValue()-256));
 		}
 
 		for (int i = 0; i < pixels.length; i++){
@@ -65,8 +78,55 @@ public class ImgCompress{
 						pixels[i][k] = (byte)(l);
 					}
 			}
-
 		}
+
+		prefin = new ArrayList<>();
+
+		vals = new ArrayList<>();
+		vals.add(clrs.length);
+		vals.add(_width);
+		vals.add(_height);
+
+		
+		byte[] clrlen = ByteBuffer.allocate(4).putInt(clrs.length).array();
+		byte[] wid = ByteBuffer.allocate(4).putInt(_width).array();
+		byte[] hi = ByteBuffer.allocate(4).putInt(_height).array();
+
+		
+		for (int y = 0; y < 4; y++) {
+   			prefin.add(clrlen[y]);
+		}
+
+		for (int z = 0; z < 4; z++) {
+   			prefin.add(wid[z]);
+		}
+
+		for (int x = 0; x < 4; x++) {
+			prefin.add(hi[x]);
+		}
+
+		for (int m = 0; m < clrs.length; m++){
+			prefin.add(clrs[m]);
+		}
+
+		for (int i = 0; i < pixels.length; i++){
+			for (int k = 0; k < pixels[i].length; k++){
+				prefin.add(pixels[i][k]);
+			}
+		}
+
+		fin = new byte[prefin.size()];
+
+		for (int i = 0; i < fin.length; i++)
+			fin[i]=prefin.get(i);
+
+		return fin;
+
+		
+
+
+
+	}
 		
 /*
 		byte[] palette = new byte[clrs.size()];
@@ -80,10 +140,55 @@ public class ImgCompress{
 		}
 		System.out.println();
 */
+	
+
+	public static void decrypt(Byte[] x){//BufferedImage
+		byte[] lenArr = new byte[4];
+		byte[] widArr = new byte[4];
+		byte[] hiArr = new byte[4];
+		for (int i = 0; i < 4; i++)
+			lenArr[i]=x[i];
+
+		for (int i = 4; i < 8; i++)
+			widArr[i-4]=x[i];
+
+		for (int i = 4; i < 12; i++)
+			hiArr[i-8]=x[i];
+
+		int colorLen = ByteBuffer.wrap(lenArr).getInt();
+		int widEn = ByteBuffer.wrap(widArr).getInt();
+		int hiEn = ByteBuffer.wrap(hiArr).getInt();
+
+		BufferedImage finImage = new BufferedImage(widEn,hiEn, BufferedImage.TYPE_INT_RGB);
+
+		byte[] palette = new byte[colorLen];
+		for (int i = 12; i < colorLen + 12; i++)
+			palette[i] = x[i+12];
+
+		byte[][] img = new byte[hiEn][widEn];
+
+		int r = 12 + colorLen;
+
+		for (int i = 0; i < hiEn; i++){
+			for (int j = 0; i < widEn; j++){
+				img[i][j] = x[r];
+				r++;
+			}
+		}
+
+		for (int i = 0; i < hiEn; i++){
+			for (int j = 0; i < widEn; j++){
+				finImage.setRGB(i, j, palette[(img[i][j])]);
+
+			}
+		}
+
+		ImageIO.write(finImage,"BMP",new File("MyImage.bmp"));
+
 	}
 
 	
 	public static void main(String[] args){
-		encrypt();
+		encrypt("clue.bmp");
 	}
 }
