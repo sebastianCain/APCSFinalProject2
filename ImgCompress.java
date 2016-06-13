@@ -193,7 +193,7 @@ public class ImgCompress{
 		for (int i = 0; i < colorLen ; i++)
 			palette[i] = x[i+12];
 
-		byte[][] img = new byte[hiEn][widEn];
+		byte[][] img = new byte[widEn][hiEn];
 
 		int r = 12 + colorLen;
 		//System.out.println("rs:");
@@ -215,12 +215,13 @@ public class ImgCompress{
 
 		for (int i = 0; i < hiEn; i++){
 			for (int j = 0; j < widEn; j++){
+				if ((i==hiEn-1)&&(j==widEn-1)) 
+					break;
 				finImage.setRGB(i, j, palette[(img[i][j])]);
 				System.out.print(palette[(img[i][j])]);
 				//System.out.println("i:"+i+"j:"+j);
 				//System.out.println("hien:"+hiEn+"widEn"+widEn);
-				if ((i==hiEn-1)&&(j==widEn-1)) 
-					break;
+				
 
 			}
 			if (i==hiEn-1) 
@@ -234,8 +235,8 @@ public class ImgCompress{
 
 	
 	public static void main(String[] args){
-		encrypt("16x.bmp");
-		decrypt(encrypt("16x.bmp"));
+		encrypt("splitter.bmp");
+		decrypt(encrypt("splitter.bmp"));
 
 		
 
