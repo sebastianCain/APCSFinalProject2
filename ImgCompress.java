@@ -196,11 +196,11 @@ public class ImgCompress{
 		byte[][] img = new byte[hiEn][widEn];
 
 		int r = 12 + colorLen;
-		System.out.println("rs:");
-		System.out.println(r);
+		//System.out.println("rs:");
+		//CoSystem.out.println(r);
 
 		for (int i = 0; i < hiEn; i++){//hien
-			System.out.println("imgi.len:"+img[i].length);
+			//System.out.println("imgi.len:"+img[i].length);
 			for (int j = 0; j < widEn; j++){//widen
 				img[i][j] = x[r];
 				
@@ -216,14 +216,16 @@ public class ImgCompress{
 		for (int i = 0; i < hiEn; i++){
 			for (int j = 0; j < widEn; j++){
 				finImage.setRGB(i, j, palette[(img[i][j])]);
-				System.out.println("i:"+i+"j:"+j);
-				System.out.println("hien:"+hiEn+"widEn"+widEn);
+				System.out.print(palette[(img[i][j])]);
+				//System.out.println("i:"+i+"j:"+j);
+				//System.out.println("hien:"+hiEn+"widEn"+widEn);
 				if ((i==hiEn-1)&&(j==widEn-1)) 
 					break;
 
 			}
 			if (i==hiEn-1) 
 					break;
+			System.out.println();
 		}
 
 		//ImageIO.write(finImage,"BMP",new File("MyImage.bmp"));
