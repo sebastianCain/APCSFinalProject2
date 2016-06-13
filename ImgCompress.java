@@ -48,7 +48,7 @@ public class ImgCompress{
 		int _height = _img.getHeight();
 		System.out.println("width: " + _width + "height: " + _height);
 
-		byte[][] pixels = new byte[_height][_width];
+		byte[][] pixels = new byte[_width][_height];
 		preclrs = new ArrayList<>();//holds palette while image is being processed
 		//byte[] clrs;//holds palette
 
@@ -60,6 +60,7 @@ public class ImgCompress{
 		    		preclrs.add(color);
 		    }
 		}
+
 
 		clrs = new byte[preclrs.size()];
 
@@ -120,6 +121,24 @@ public class ImgCompress{
 		for (int i = 0; i < fin.length; i++)
 			fin[i]=prefin.get(i);
 
+		for (int i = 0; i < _width; i++){
+			for (int j = 0; j < _height; j++){
+				System.out.print(pixels[i][j]);
+				System.out.print("       ");
+			}
+			System.out.println();
+		}
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println("Palette!:");
+
+		for (int i = 0; i < clrs.length; i++){
+			System.out.println((int)clrs[i]);
+		}
 		return fin;
 
 		
@@ -183,12 +202,19 @@ public class ImgCompress{
 			}
 		}
 
-		ImageIO.write(finImage,"BMP",new File("MyImage.bmp"));
+		//ImageIO.write(finImage,"BMP",new File("MyImage.bmp"));
 
 	}
 
 	
 	public static void main(String[] args){
-		encrypt("clue.bmp");
+		encrypt("16x.bmp");
+
+		
+
 	}
 }
+
+
+
+
