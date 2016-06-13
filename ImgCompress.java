@@ -161,45 +161,69 @@ public class ImgCompress{
 */
 	
 
-	public static void decrypt(Byte[] x){//BufferedImage
+	public static void decrypt(byte[] x){//BufferedImage
+		System.out.println("length of the byte array:");
+		System.out.println(x.length);
+
 		byte[] lenArr = new byte[4];
 		byte[] widArr = new byte[4];
 		byte[] hiArr = new byte[4];
+
 		for (int i = 0; i < 4; i++)
 			lenArr[i]=x[i];
 
 		for (int i = 4; i < 8; i++)
 			widArr[i-4]=x[i];
 
-		for (int i = 4; i < 12; i++)
+		for (int i = 8; i < 12; i++)
 			hiArr[i-8]=x[i];
 
 		int colorLen = ByteBuffer.wrap(lenArr).getInt();
 		int widEn = ByteBuffer.wrap(widArr).getInt();
 		int hiEn = ByteBuffer.wrap(hiArr).getInt();
 
+		System.out.println(colorLen);
+		System.out.println(widEn);
+		System.out.println(hiEn);
+
 		BufferedImage finImage = new BufferedImage(widEn,hiEn, BufferedImage.TYPE_INT_RGB);
 
 		byte[] palette = new byte[colorLen];
-		for (int i = 12; i < colorLen + 12; i++)
+
+		for (int i = 0; i < colorLen ; i++)
 			palette[i] = x[i+12];
 
 		byte[][] img = new byte[hiEn][widEn];
 
 		int r = 12 + colorLen;
+		System.out.println("rs:");
+		System.out.println(r);
 
-		for (int i = 0; i < hiEn; i++){
-			for (int j = 0; i < widEn; j++){
+		for (int i = 0; i < hiEn; i++){//hien
+			System.out.println("imgi.len:"+img[i].length);
+			for (int j = 0; j < widEn; j++){//widen
 				img[i][j] = x[r];
+				
+				if ((i==hiEn-1)&&(j==widEn-1)) 
+					break;
+				//System.out.println(r);
 				r++;
 			}
+			if (i==hiEn-1) 
+					break;
 		}
 
 		for (int i = 0; i < hiEn; i++){
-			for (int j = 0; i < widEn; j++){
+			for (int j = 0; j < widEn; j++){
 				finImage.setRGB(i, j, palette[(img[i][j])]);
+				System.out.println("i:"+i+"j:"+j);
+				System.out.println("hien:"+hiEn+"widEn"+widEn);
+				if ((i==hiEn-1)&&(j==widEn-1)) 
+					break;
 
 			}
+			if (i==hiEn-1) 
+					break;
 		}
 
 		//ImageIO.write(finImage,"BMP",new File("MyImage.bmp"));
@@ -209,6 +233,7 @@ public class ImgCompress{
 	
 	public static void main(String[] args){
 		encrypt("16x.bmp");
+		decrypt(encrypt("16x.bmp"));
 
 		
 
